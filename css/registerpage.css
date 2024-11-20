@@ -1,0 +1,19 @@
+/* Registrer side */
+
+body {
+  background-color: gray; /* Lys bakrgunn */
+}
+
+.register-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgb(0, 0, 0.1);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
