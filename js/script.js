@@ -8,6 +8,16 @@ const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 const confirmPasswordError = document.getElementById("confirmPasswordError");
 
+// Funksjon for å rydde opp feilmeldinger
+
+function clearErrors() {
+  fullNameError.textContent = "";
+  emailError.textContent = "";
+  passwordError.textContent = "";
+  confirmPasswordError.textContent = "";
+  registerMessage.textContent = ""; // Nullstill melding før forespørsel
+}
+
 // Funksjon for validering
 function validateForm({ fullName, email, password, confirmPassword }) {
   let isValid = true;
@@ -33,6 +43,12 @@ function validateForm({ fullName, email, password, confirmPassword }) {
   return isValid;
 }
 
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!email.match(emailPattern)) {
+  emailError.textContent = "Please enter a valid email address.";
+  isValid = false;
+}
+
 // Registreringsskjema
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -53,6 +69,7 @@ registerForm.addEventListener("submit", async (e) => {
   const userData = { fullName, email, password };
 
   try {
+    registerMessage.textContent = ""; // Nullstill melding
     const response = await fetch("https://api.noroff.no/social/register", {
       method: "POST",
       headers: {
@@ -70,6 +87,7 @@ registerForm.addEventListener("submit", async (e) => {
       registerMessage.textContent = `Error: ${error.message}`;
     }
   } catch (err) {
+    console.error("Network error:", err);
     registerMessage.textContent = "An error occurred. Please try again.";
   }
 });
@@ -105,6 +123,14 @@ loginForm.addEventListener("submit", async (e) => {
       loginMessage.textContent = `Error: ${error.message}`;
     }
   } catch (err) {
+    console.error("Network error:", err);
     loginMessage.textContent = "An error occurred. Please try again.";
   }
 });
+
+if (!response.ok) {
+  const error = await response.json();
+  registerMessage.textContent = error.message || "Unexpected error occurred.";
+}
+
+window.location.href = "/profilepage.html";
