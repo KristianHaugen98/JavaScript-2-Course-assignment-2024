@@ -43,13 +43,8 @@ function validateForm({ fullName, email, password, confirmPassword }) {
   return isValid;
 }
 
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (!email.match(emailPattern)) {
-  emailError.textContent = "Please enter a valid email address.";
-  isValid = false;
-}
-
 // Registreringsskjema
+document.getElementById(registerForm);
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -70,7 +65,7 @@ registerForm.addEventListener("submit", async (e) => {
 
   try {
     registerMessage.textContent = ""; // Nullstill melding
-    const response = await fetch("https://api.noroff.no/social/register", {
+    const response = await fetch("80826ae6-e374-4cd5-ae00-0b6aeadd83de", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +100,7 @@ loginForm.addEventListener("submit", async (e) => {
   const loginData = { email, password };
 
   try {
-    const response = await fetch("https://api.noroff.no/social/login", {
+    const response = await fetch("80826ae6-e374-4cd5-ae00-0b6aeadd83de", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -128,9 +123,4 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-if (!response.ok) {
-  const error = await response.json();
-  registerMessage.textContent = error.message || "Unexpected error occurred.";
-}
-
-window.location.href = "/profilepage.html";
+window.location.href = "profilepage.html";

@@ -6,7 +6,7 @@ const token = localStorage.getItem("jwtToken"); // Token fra innloggingen
 
 async function fetchPost() {
   try {
-    const response = await fetch("https://api.noroff.no/social/posts", {
+    const response = await fetch("80826ae6-e374-4cd5-ae00-0b6aeadd83de", {
       headers: {
         Authorization: `Bearer ${token}`, // Legger til token i headeren.
       },
@@ -46,4 +46,106 @@ function displayPost(posts) {
   });
 }
 
-// Oppretting av nye innlegg:
+// Oppretting av nye innlegg.
+
+function post(path, params, method = "post") {
+  const form = document.createElement("form");
+  form.method = method;
+  form.action = path;
+
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = docmunet.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.name = key;
+      hiddenField.value = params[key];
+
+      form.appendChild(hiddenField);
+    }
+  }
+
+  docmunet.body.appendChild(form);
+  form.submit();
+}
+
+// Sletting av innlegg
+
+postList.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("deletePost")) {
+    const postId = e.target.getAttribute("data-id");
+
+    try {
+      const response = await fetch(
+        `80826ae6-e374-4cd5-ae00-0b6aeadd83de${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`, // Legg til token
+          },
+        }
+      );
+
+      if (response.ok) {
+        fetchPost(); // Oppdater innleggene
+      } else {
+        console.error("Failed to delete post");
+      }
+    } catch (err) {
+      console.error("Error deleting post:", err);
+    }
+  }
+});
+
+// Denne koden gjør det mulig å redigere innleggene:
+
+postList.addEventListener("Click", (e) => {
+  if (e.target.classList.contains("editPost")) {
+    const postID = e.target.getAttribute("data-id");
+    const postItem = e.target.getAttribute("data-id");
+
+    const currentTitle = postItem.querySelector("h5").textContent;
+    const currentBody = postItem.querySelector("p").textContent;
+
+    postItem.innerHTML = `
+        <input type="text" class="form-control mb-2 editTitle" value="${currentTitle}">
+        <textarea class="form-control mb-2 editBody">${currentBody}</textarea>
+        <button class="btn btn-secondary btn-sm ccancelEdit">Cancel</button>
+        `;
+  }
+
+  if (e.target.classList.contains("cancelEdit")) {
+    fetchPost(); // Tilbakestiller listen.
+  }
+});
+
+postList.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("saveEdit")) {
+    const postId = e.target.getAttribute("data-id");
+    const postItem = e.target.closest("li");
+
+    const updateTitle = postItem.querySelector(".editTitle").value.trim();
+    const updateBody = postItem.querySelector("editBody").value.trim();
+
+    try {
+      const response = await fetch(
+        `80826ae6-e374-4cd5-ae00-0b6aeadd83de${postId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title: updateTitle, body: updateBody }),
+        }
+      );
+
+      if (response.ok) {
+        fetchPost(); // Oppdater innleggene
+      } else {
+        console.error("Failed to update post");
+      }
+    } catch (err) {
+      console.error("Error updating post:", err);
+    }
+  }
+});
