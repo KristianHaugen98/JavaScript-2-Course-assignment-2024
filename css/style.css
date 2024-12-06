@@ -1,12 +1,13 @@
 body {
-  background-color: gray; /* Lys bakgrunn */
+  background: linear-gradient(200deg, #71b7e6, #9b59b6);
+  padding: 50px;
 }
 
 /* Log inn side */
 
 .login-container {
   max-width: 500px;
-  margin: 50px auto;
+  margin: 250px auto;
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -31,4 +32,13 @@ body {
 
 .btn-primary :hover {
   background-color: #0056b3;
+}
+
+.login-header h1 {
+  font-size: 40px;
+  font-weight: normal;
+}
+
+.btn {
+  background: linear-gradient(200deg, #71b7e6, #9b59b6);
 }

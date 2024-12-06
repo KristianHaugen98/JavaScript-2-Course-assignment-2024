@@ -1,14 +1,18 @@
 const postList = document.getElementById("postList");
 const newPostForm = document.getElementById("newPostForm");
+const postTitle = document.getElementById("postTitle");
+const postBody = document.getElementById("postBody");
 const token = localStorage.getItem("jwtToken"); // Token fra innloggingen
+const API_URL = "https://v2.api.noroff.dev/social/posts";
 
 // Funksjon for å hente brukerens innlegg:
 
 async function fetchPost() {
   try {
-    const response = await fetch("80826ae6-e374-4cd5-ae00-0b6aeadd83de", {
+    const response = await fetch(API_URL, {
       headers: {
         Authorization: `Bearer ${token}`, // Legger til token i headeren.
+        "X-Noroff-API-Key": "7e68ab4e-0574-4a90-9b16-1b7b1f140b11",
       },
     });
 
@@ -34,12 +38,8 @@ function displayPost(posts) {
     postItem.innerHTML = `
         <h5>${post.title}</h5>
         <p>${post.body}</p>
-        <button class="btn btn-warning btn-sm editPost" data-id="${
-          post.id
-        }">Edit</button>
-        <button class="btn btn-sm deletePost" data-id="${
-          post - id
-        }">Delete</button>
+        <button class="btn btn-warning btn-sm editPost" data-id="${post.id}">Edit</button>
+        <button class="btn btn-sm deletePost" data-id="${post.id}">Delete</button>
         `;
 
     postList.appendChild(postItem);
@@ -48,25 +48,41 @@ function displayPost(posts) {
 
 // Oppretting av nye innlegg.
 
-function post(path, params, method = "post") {
-  const form = document.createElement("form");
-  form.method = method;
-  form.action = path;
+newPostForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const hiddenField = docmunet.createElement("input");
-      hiddenField.type = "hidden";
-      hiddenField.name = key;
-      hiddenField.value = params[key];
+  debugger;
 
-      form.appendChild(hiddenField);
+  const content = postBody.value.trim();
+  const title = postTitle.value.trim();
+
+  if (!content || !title) return;
+
+  try {
+    const response = await fetch(`${API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3Jpc3RpYW4iLCJlbWFpbCI6ImtyaWhhdTUwODcxQHN0dWQubm9yb2ZmLm5vIiwiaWF0IjoxNzMzNDExNDYzfQ.9WIiTZRcF5UMBTsNg1LFJQq4FbV-8M-SBcaX1V6uC3I`,
+        "X-Noroff-API-Key": "c18cc228-141a-4c70-bc09-cedf28ae6384",
+      },
+      body: JSON.stringify({
+        body: content,
+        title: title,
+      }),
+    });
+
+    if (response.ok) {
+      postBody.value = "";
+      postTitle.value = "";
+      fetchPost();
+    } else {
+      console.log("Failed to create post");
     }
+  } catch (err) {
+    console.log("Error creating post:", err);
   }
-
-  docmunet.body.appendChild(form);
-  form.submit();
-}
+});
 
 // Sletting av innlegg
 
@@ -75,15 +91,13 @@ postList.addEventListener("click", async (e) => {
     const postId = e.target.getAttribute("data-id");
 
     try {
-      const response = await fetch(
-        `80826ae6-e374-4cd5-ae00-0b6aeadd83de${postId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`, // Legg til token
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/${postId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`, // Legg til token
+          "X-Noroff-API-Key": "77c72977-e065-42eb-8d8a-793fd55d317f",
+        },
+      });
 
       if (response.ok) {
         fetchPost(); // Oppdater innleggene
@@ -98,11 +112,9 @@ postList.addEventListener("click", async (e) => {
 
 // Denne koden gjør det mulig å redigere innleggene:
 
-postList.addEventListener("Click", (e) => {
+postList.addEventListener("click", (e) => {
   if (e.target.classList.contains("editPost")) {
-    const postID = e.target.getAttribute("data-id");
-    const postItem = e.target.getAttribute("data-id");
-
+    const postItem = e.target.closest("li");
     const currentTitle = postItem.querySelector("h5").textContent;
     const currentBody = postItem.querySelector("p").textContent;
 
@@ -118,26 +130,26 @@ postList.addEventListener("Click", (e) => {
   }
 });
 
+// Lagre redigerte innlegg
+
 postList.addEventListener("click", async (e) => {
   if (e.target.classList.contains("saveEdit")) {
     const postId = e.target.getAttribute("data-id");
     const postItem = e.target.closest("li");
 
     const updateTitle = postItem.querySelector(".editTitle").value.trim();
-    const updateBody = postItem.querySelector("editBody").value.trim();
+    const updateBody = postItem.querySelector(".editBody").value.trim();
 
     try {
-      const response = await fetch(
-        `80826ae6-e374-4cd5-ae00-0b6aeadd83de${postId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ title: updateTitle, body: updateBody }),
-        }
-      );
+      const response = await fetch(`${API_URL}/${postId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "X-Noroff-API-Key": "77c72977-e065-42eb-8d8a-793fd55d317f",
+        },
+        body: JSON.stringify({ title: updateTitle, body: updateBody }),
+      });
 
       if (response.ok) {
         fetchPost(); // Oppdater innleggene

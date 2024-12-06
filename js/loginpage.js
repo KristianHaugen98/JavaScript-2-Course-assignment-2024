@@ -47,9 +47,13 @@ loginForm.addEventListener("submit", async (e) => {
 
     if (response.ok) {
       const data = await response.json();
-      const token = data.token;
-      localStorage.setItem("jwtToken", token); // Lagre token
+      const token = data.data.accessToken;
 
+      if (token) {
+        localStorage.setItem("jwtToken", token); // Lagre token
+        console.log("Token lagret i localstore");
+      }
+      console.log("Token lagret:", token);
       // Vis suksessmelding.
 
       loginMessage.textContent = "Login successful!";
