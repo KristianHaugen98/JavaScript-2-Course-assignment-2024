@@ -10,15 +10,15 @@ const API_URL = "https://v2.api.noroff.dev/social/posts";
 async function fetchPost() {
   try {
     const response = await fetch(API_URL, {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`, // Legger til token i headeren.
         "X-Noroff-API-Key": "7e68ab4e-0574-4a90-9b16-1b7b1f140b11",
       },
     });
-
     if (response.ok) {
-      const posts = await response.json();
-      displayPost(posts); // Viser innlegg i UI.
+      const jsonResponse = await response.json();
+      displayPost(jsonResponse.posts || jsonResponse.data || jsonResponse); // Viser innlegg i UI.
     } else {
       console.error("Failed to fetch posts");
     }
@@ -27,6 +27,7 @@ async function fetchPost() {
   }
 }
 
+fetchPost();
 // Funksjonen for å vise innlegg:
 
 function displayPost(posts) {
@@ -50,8 +51,6 @@ function displayPost(posts) {
 
 newPostForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  debugger;
 
   const content = postBody.value.trim();
   const title = postTitle.value.trim();
