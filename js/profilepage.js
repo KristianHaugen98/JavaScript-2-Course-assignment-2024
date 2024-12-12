@@ -90,13 +90,16 @@ postList.addEventListener("click", async (e) => {
     const postId = e.target.getAttribute("data-id");
 
     try {
-      const response = await fetch(`${API_URL}/${postId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`, // Legg til token
-          "X-Noroff-API-Key": "77c72977-e065-42eb-8d8a-793fd55d317f",
-        },
-      });
+      const response = await fetch(
+        `https://v2.api.noroff.dev/social/posts/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`, // Legg til token
+            "X-Noroff-API-Key": "77c72977-e065-42eb-8d8a-793fd55d317f",
+          },
+        }
+      );
 
       if (response.ok) {
         fetchPost(); // Oppdater innleggene
