@@ -123,17 +123,19 @@ postList.addEventListener("click", (e) => {
     postItem.innerHTML = `
         <input type="text" class="form-control mb-2 editTitle" value="${currentTitle}">
         <textarea class="form-control mb-2 editBody">${currentBody}</textarea>
+        <button class="btn btn-primary btn-sm saveEdit" data-id="${e.target.getAttribute(
+          "data-id"
+        )}">Save</button>
         <button class="btn btn-secondary btn-sm ccancelEdit">Cancel</button>
         `;
   }
-
+  // Abryt redigeringen
   if (e.target.classList.contains("cancelEdit")) {
     fetchPost(); // Tilbakestiller listen.
   }
 });
 
 // Lagre redigerte innlegg
-
 postList.addEventListener("click", async (e) => {
   if (e.target.classList.contains("saveEdit")) {
     const postId = e.target.getAttribute("data-id");
