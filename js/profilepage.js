@@ -7,6 +7,19 @@ const API_URL = "https://v2.api.noroff.dev/social/posts";
 
 // Funksjon for å hente brukerens innlegg:
 
+/**
+ * fetchPost fetches posts fra API-en og viser det på siden.
+ * Funksjonen bruker API URL og en autorisasjon token for å få alle postene fra brukere.
+ *
+ * @async
+ * @function fetchPost
+ * @returns {Promise<void>} Løses når innlegg hentes og vises.
+ *
+ * @example
+ * // Kaller fetchPost funksjonen til display posts on the page.
+ * fetchPost();
+ */
+
 async function fetchPost() {
   try {
     const response = await fetch(API_URL, {
