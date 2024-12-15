@@ -1,0 +1,12 @@
+body {
+  background: linear-gradient(200deg, #71b7e6, #9b59b6);
+  padding: 0px;
+}
+
+.navbar {
+  color: aliceblue;
+}
+
+.form-control {
+  color: gray;
+}

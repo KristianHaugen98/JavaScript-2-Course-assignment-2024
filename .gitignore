@@ -1,0 +1,8 @@
+# Dette ignorerer node_modules
+node_modules/
+
+git rm -r --cached node_modules
+
+
+git add .gitignore
+git commit -m "Oppdatert .gitignore for å ignorere node_modules"

@@ -1,0 +1,24 @@
+/* Registrer side */
+
+body {
+  background: linear-gradient(200deg, #9b59b6, #71b7e6);
+  padding: 12rem;
+}
+
+.register-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgb(0, 0, 0.1);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background: linear-gradient(200deg, #71b7e6, #9b59b6);
+}
