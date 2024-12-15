@@ -1,7 +1,8 @@
 /* Registrer side */
 
 body {
-  background-color: gray; /* Lys bakrgunn */
+  background: linear-gradient(200deg, #9b59b6, #71b7e6);
+  padding: 12rem;
 }
 
 .register-container {
@@ -16,4 +17,8 @@ body {
 .register-header {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.btn {
+  background: linear-gradient(200deg, #71b7e6, #9b59b6);
 }
